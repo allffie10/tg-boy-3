@@ -3,7 +3,7 @@ import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
-# ==4======== কনফিগারেশন ==========
+# ===1======= কনফিগারেশন ==========
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")  # Render এ Environment Variable বসাবেন
 GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003885529323))   # ঋণাত্মক সংখ্যা
 GROUP_2_ID = int(os.getenv("GROUP_2_ID", -1003867100912))
