@@ -5,11 +5,11 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 
 # ========== কনফিগারেশন ==========
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")
-GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003885529323))
+GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003710219957))
 GROUP_2_ID = int(os.getenv("GROUP_2_ID", -1003867100912))
 LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")
 
-GROUP_1_INVITE = "https://t.me/+NJ4VnzY1mp45YzY1"
+GROUP_1_INVITE = "https://t.me/+3sHjdk2MXxQyOGE1"
 GROUP_2_INVITE = "https://t.me/oxifgaradarkmind"
 
 logging.basicConfig(level=logging.INFO)
