@@ -55,19 +55,14 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             f"❌ আপনি এখনো জয়েন করেননি: {', '.join(missing)}\n\nউপরের বাটনে ক্লিক করে জয়েন করুন।",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 পুনরায় চেক করুন", callback_data="check")]])
-        )
-
-def main():
+            } 
+    def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(check_callback, pattern="check"))
     
-    # ওয়েবহুক চালু করবে (Render-এ স্বয়ংক্রিয়)
-    app.run_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        webhook_url=f"https://tg-boy-3.onrender.com/{BOT_TOKEN}"   # Render URL বসান
-    )
+    # 🔥 শুধু এই লাইনটুকু রাখুন, বাকিটা বাদ দিন 🔥
+    app.run_polling()
     # যদি লোকাল টেস্ট করতে চান, তাহলে ওয়েবহুক বাদ দিয়ে app.run_polling() ব্যবহার করবেন।
 
 if __name__ == "__main__":
